@@ -25,28 +25,14 @@ router.post('/register', async (req, res) => {
 });
 
 // Login
-// Login
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log("Login request:", email, password);
-
     const user = await User.findOne({ email });
-    if (!user) {
-      console.log("User not found");
+    if (!user || !(await user.comparePassword(password))) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
-
-    const isMatch = await user.comparePassword(password);
-    console.log("Password match result:", isMatch);
-
-    if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid credentials' });
-    }
-
-    if (!user.isActive) {
-      return res.status(400).json({ message: 'Account is deactivated' });
-    }
+    if (!user.isActive) return res.status(400).json({ message: 'Account is deactivated' });
 
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
     res.json({ message: 'Login successful', token, user });
@@ -56,12 +42,45 @@ router.post('/login', async (req, res) => {
   }
 });
 
-
 // Forgot Password
 router.post('/send-otp', sendOtp);
 router.post('/reset-password', resetPassword);
 
 // Get current user
 router.get('/me', authenticate, (req, res) => res.json({ user: req.user }));
+
+// Google Login
+router.post('/google', async (req, res) => {
+  try {
+    const { name, email, picture } = req.body;
+
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      const randomPassword = Math.random().toString(36).slice(-8);
+
+      user = new User({
+        name,
+        email,
+        picture,
+        password: randomPassword,
+        googleAuth: true
+      });
+
+      await user.save();
+    }
+
+    const token = jwt.sign(
+      { userId: user._id },
+      process.env.JWT_SECRET || 'fallback-secret',
+      { expiresIn: '7d' }
+    );
+
+    res.json({ token, user });
+  } catch (err) {
+    console.error('Google login error:', err.message);
+    res.status(500).json({ message: 'Google login failed' });
+  }
+});
 
 export default router;
