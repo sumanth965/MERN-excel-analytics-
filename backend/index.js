@@ -13,7 +13,7 @@ import passport from 'passport';
 import authRoutes from './routes/auth.js';
 import fileRoutes from './routes/files.js';
 import analyticsRoutes from './routes/analytics.js';
-import googleRoutes from './routes/googleRoutes.js';
+//import googleRoutes from './routes/googleRoutes.js';
 import { errorHandler } from './middleware/errorMiddleware.js';
 import './config/passport.js';
 
@@ -44,7 +44,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/auth', googleRoutes);
+//app.use('/api/auth', googleRoutes);
 app.use('/api/files', fileRoutes);
 app.use('/api/analytics', analyticsRoutes);
 
