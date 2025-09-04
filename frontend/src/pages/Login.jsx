@@ -40,7 +40,7 @@ const Login = () => {
   const handleSendOTP = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('https://mern-excel-analytics.onrender.com/api/auth/send-otp', { email });
+      await axios.post('https://mern-excel-backend.onrender.com/api/auth/send-otp', { email });
       toast.success('OTP sent to your email.');
       setStep('reset');
     } catch (err) {
@@ -60,7 +60,7 @@ const Login = () => {
       return;
     }
     try {
-      await axios.post('https://mern-excel-analytics.onrender.com/api/auth/reset-password', {
+      await axios.post('https://mern-excel-backend.onrender.com/api/auth/reset-password', {
         email,
         otp: otpString,
         password: newPassword,
@@ -93,7 +93,7 @@ const Login = () => {
       if (!credential) return toast.error('No Google credential received');
 
       const decoded = jwtDecode(credential);
-      const res = await axios.post('https://mern-excel-analytics.onrender.com/api/auth/google', {
+      const res = await axios.post('https://mern-excel-backend.onrender.com/api/auth/google', {
         name: decoded.name,
         email: decoded.email,
         picture: decoded.picture,
