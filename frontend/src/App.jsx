@@ -34,14 +34,14 @@ function App() {
         <div className="min-h-screen bg-gray-50">
           {user && <Navbar />}
           <Routes>
-            <Route
+{/*             <Route
               path="/login"
               element={user ? <Navigate to="/dashboard" /> : <Login />}
             />
             <Route
               path="/register"
               element={user ? <Navigate to="/dashboard" /> : <Register />}
-            />
+            /> */}
             <Route
               path="/dashboard"
               element={user ? <Dashboard /> : <Navigate to="/login" />}
