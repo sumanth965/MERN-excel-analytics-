@@ -2,8 +2,6 @@ import React from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './contexts/AuthContext'
 import Navbar from './components/Navbar'
-import Login from './pages/Login'
-import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
 import FileUpload from './pages/FileUpload'
 import FileView from './pages/FileView'
@@ -29,44 +27,34 @@ function App() {
 
   return (
     <GoogleOAuthProvider clientId={clientId}>
-
       <Router>
         <div className="min-h-screen bg-gray-50">
           {user && <Navbar />}
           <Routes>
-{/*             <Route
-              path="/login"
-              element={user ? <Navigate to="/dashboard" /> : <Login />}
-            />
-            <Route
-              path="/register"
-              element={user ? <Navigate to="/dashboard" /> : <Register />}
-            /> */}
             <Route
               path="/dashboard"
-              element={user ? <Dashboard /> : <Navigate to="/login" />}
+              element={user ? <Dashboard /> : <Navigate to="/" />}
             />
             <Route
               path="/upload"
-              element={user ? <FileUpload /> : <Navigate to="/login" />}
+              element={user ? <FileUpload /> : <Navigate to="/" />}
             />
             <Route
               path="/file/:id"
-              element={user ? <FileView /> : <Navigate to="/login" />}
+              element={user ? <FileView /> : <Navigate to="/" />}
             />
             <Route
               path="/analytics/:id"
-              element={user ? <Analytics /> : <Navigate to="/login" />}
+              element={user ? <Analytics /> : <Navigate to="/" />}
             />
             <Route
               path="/"
-              element={<Navigate to={user ? "/dashboard" : "/login"} />}
+              element={<Navigate to={user ? "/dashboard" : "/"} />}
             />
           </Routes>
         </div>
       </Router>
     </GoogleOAuthProvider>
-
   )
 }
 
